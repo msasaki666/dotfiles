@@ -57,8 +57,6 @@ function apply_kube_ps1() {
 }
 apply_kube_ps1
 
-test -r ~/.bashrc && . ~/.bashrc
-
 HISTSIZE=1000
 HISTFILESIZE=1000
 
