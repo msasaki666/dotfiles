@@ -7,7 +7,7 @@ link_to_homedir() {
   # commandは、シェルコマンド以外も実行できる。bulitinコマンドはシェルコマンドしか実行できない。
   command echo "backup old dotfiles..."
   # バックアップ用ディレクトリの作成
-  local backupdirname = ".dotbackup"
+  local backupdirname=".dotbackup"
   if [ ! -d "$HOME/$backupdirname" ];then
     # ~と$HOMEは、同じ場所を示すが、""で囲んでも意味を成すのは$HOME
     command echo "$HOME/$backupdirname not found. Auto Make it"
@@ -22,7 +22,7 @@ link_to_homedir() {
     # ?: 任意の一文字にマッチ
     # *: 長さ0以上の文字列にマッチ
     for f in $dotdir/.*; do
-      local filename = `basename $f`
+      local filename=`basename $f`
       # -L: ファイルが存在し、シンボリックリンクであれば真
       if [[ -L "$HOME/$filename" ]];then
         command rm -f "$HOME/$filename"
