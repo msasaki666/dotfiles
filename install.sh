@@ -4,10 +4,11 @@ link_to_homedir() {
   # commandは、シェルコマンド以外も実行できる。bulitinコマンドはシェルコマンドしか実行できない。
   command echo "backup old dotfiles..."
   # バックアップ用ディレクトリの作成
-  if [ ! -d "$HOME/.dotbackup" ];then
+  local backupdirname = ".dotbackup"
+  if [ ! -d "$HOME/$backupdirname" ];then
     # ~と$HOMEは、同じ場所を示すが、""で囲んでも意味を成すのは$HOME
-    command echo "$HOME/.dotbackup not found. Auto Make it"
-    command mkdir "$HOME/.dotbackup"
+    command echo "$HOME/$backupdirname not found. Auto Make it"
+    command mkdir "$HOME/$backupdirname"
   fi
 
   # dirnameは、パスからディレクトリ部分のみを取り出す
@@ -15,14 +16,20 @@ link_to_homedir() {
   local script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
   local dotdir=$(dirname ${script_dir})
   if [[ "$HOME" != "$dotdir" ]];then
-    for f in $dotdir/.??*; do
-      [[ `basename $f` == ".git" ]] && continue
-      if [[ -L "$HOME/`basename $f`" ]];then
-        command rm -f "$HOME/`basename $f`"
+    # ?: 任意の一文字にマッチ
+    # *: 長さ0以上の文字列にマッチ
+    for f in $dotdir/.*; do
+      local filename = `basename $f`
+      # -L: ファイルが存在し、シンボリックリンクであれば真
+      if [[ -L "$HOME/$filename" ]];then
+        command rm -f "$HOME/$filename"
       fi
-      if [[ -e "$HOME/`basename $f`" ]];then
-        command mv "$HOME/`basename $f`" "$HOME/.dotbackup"
+      if [[ -e "$HOME/$filename" ]];then
+        command mv "$HOME/$filename" "$HOME/$backupdirname"
       fi
+      # -s: ハードリンクではなく、シンボリックリンクを作る
+      # -n: リンクの作成場所として指定したディレクトリがシンボリックリンクだった場合、参照先にリンクを作るのではなく、シンボリックリンクそのものを置き換える（-fと組み合わせて使用）
+      # -f: 同じ名前のファイルがあっても強制的に上書き
       command ln -snf $f $HOME
     done
   else
