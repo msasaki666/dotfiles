@@ -39,3 +39,7 @@ link_to_homedir() {
     command echo "same install src dest"
   fi
 }
+
+
+link_to_homedir
+command echo -e "\e[1;36m Install completed!!!! \e[m"
