@@ -17,7 +17,7 @@ link_to_homedir() {
   # dirnameは、パスからディレクトリ部分のみを取り出す
   # BASH_SOURCE[0]には実行したスクリプトのパスが入っている
   local script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
-  local dotdir=$(dirname ${script_dir})
+  local dotdir=$script_dir
   if [[ "$HOME" != "$dotdir" ]];then
     # ?: 任意の一文字にマッチ
     # *: 長さ0以上の文字列にマッチ
