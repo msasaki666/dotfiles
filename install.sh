@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# https://qiita.com/youcune/items/fcfb4ad3d7c1edf9dc96
+set -ue
+
 link_to_homedir() {
   # commandは、シェルコマンド以外も実行できる。bulitinコマンドはシェルコマンドしか実行できない。
   command echo "backup old dotfiles..."
