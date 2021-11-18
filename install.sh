@@ -2,7 +2,7 @@
 
 # https://qiita.com/youcune/items/fcfb4ad3d7c1edf9dc96
 set -ue
-
+# 「function」は省略可能
 link_to_homedir() {
   # commandは、シェルコマンド以外も実行できる。bulitinコマンドはシェルコマンドしか実行できない。
   command echo "backup old dotfiles..."
@@ -40,6 +40,10 @@ link_to_homedir() {
   fi
 }
 
+update_preference() {
+  source ~/.bashrc
+}
+
 link_to_homedir
-source ~/.bashrc
+update_preference
 command echo -e "\e[1;36m Install completed!!!! \e[m"
