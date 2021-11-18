@@ -21,7 +21,7 @@ link_to_homedir() {
   if [[ "$HOME" != "$dotdir" ]];then
     # ?: 任意の一文字にマッチ
     # *: 長さ0以上の文字列にマッチ
-    for f in $dotdir/.*; do
+    for f in $dotdir/.??*; do
       local filename=`basename $f`
       # -L: ファイルが存在し、シンボリックリンクであれば真
       if [[ -L "$HOME/$filename" ]];then
@@ -40,6 +40,6 @@ link_to_homedir() {
   fi
 }
 
-
 link_to_homedir
+source ~/.bashrc
 command echo -e "\e[1;36m Install completed!!!! \e[m"
