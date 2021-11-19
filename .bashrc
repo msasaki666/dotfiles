@@ -35,10 +35,10 @@ function execute_from_peco_history() {
     else
         local tac="tail -r"
     fi
-    SELECTED_HISTORY=`history | $tac | peco --layout bottom-up`
+    SELECTED_HISTORY=$(history | $tac | peco --layout bottom-up)
     if [ "$SELECTED_HISTORY" != "" ]; then
         # 数字 command...のうち、command...を抽出
-        EXTRACTED_COMMAND=`echo $SELECTED_HISTORY | awk '{for(i=2;i<NF;i++){printf("%s%s",$i,OFS=" ")}print $NF}'`
+        EXTRACTED_COMMAND=$(echo $SELECTED_HISTORY | awk '{for(i=2;i<NF;i++){printf("%s%s",$i,OFS=" ")}print $NF}')
         echo $EXTRACTED_COMMAND
         eval $EXTRACTED_COMMAND
         history -s $EXTRACTED_COMMAND
@@ -67,3 +67,11 @@ HISTFILESIZE=1000
 
 # -w ファイルが閉じられてからreturnする
 export EDITOR="code -w"
+
+set_bundle_editor_for_remote_container() {
+    # vscode remote containerの時はbundle openの時に、code -wだとうまく動かないので
+    if [ -e $REMOTE_CONTAINERS ]; then
+        export BUNDLER_EDITOR=code
+    fi
+}
+set_bundle_editor_for_remote_container
