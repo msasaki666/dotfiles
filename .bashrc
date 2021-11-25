@@ -27,6 +27,7 @@ alias dce='docker-compose exec'
 alias dex='docker exec -it'
 
 alias rdm='rails db:migrate'
+alias rdr='rails db:rollback'
 alias k='kubectl'
 
 function execute_from_peco_history() {
