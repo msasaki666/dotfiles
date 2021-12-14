@@ -26,9 +26,13 @@ alias dcb='docker-compose build'
 alias dce='docker-compose exec'
 alias dex='docker exec -it'
 
+alias k='kubectl'
+
 alias rdm='rails db:migrate'
 alias rdr='rails db:rollback'
-alias k='kubectl'
+
+alias gore='gore -autoimport'
+
 
 function execute_from_peco_history() {
     if which tac >/dev/null; then
