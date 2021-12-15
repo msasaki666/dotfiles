@@ -21,6 +21,8 @@ alias gst='git status'
 
 alias d='docker'
 alias dc='docker-compose'
+alias dcd='docker-compose -f docker-compose.dev.yml'
+alias dct='docker-compose -f docker-compose.test.yml'
 alias dcu='docker-compose up'
 alias dcb='docker-compose build'
 alias dce='docker-compose exec'
