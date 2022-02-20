@@ -38,15 +38,9 @@ function execute_from_peco_history() {
     else
         local tac="tail -r"
     fi
-    SELECTED_HISTORY=$(history | eval $tac | peco --layout bottom-up)
-
-    if [ "$SELECTED_HISTORY" != "" ]; then
-        # 数字 command...のうち、command...を抽出
-        EXTRACTED_COMMAND=$(echo $SELECTED_HISTORY | awk '{for(i=2;i<NF;i++){printf("%s%s",$i,OFS=" ")}print $NF}')
-        echo $EXTRACTED_COMMAND
-        eval $EXTRACTED_COMMAND
-        history -s $EXTRACTED_COMMAND
-    fi
+  BUFFER=`history -n 1 | eval $tac  | awk '!a[$0]++' | peco --layout bottom-up`
+  CURSOR=$#BUFFER
+  zle reset-prompt
 }
 # 関数をwidgetに登録
 zle -N execute_from_peco_history
@@ -102,3 +96,29 @@ zinit light-mode for \
     zdharma-continuum/zinit-annex-rust
 
 ### End of Zinit's installer chunk
+
+# この記事を参考に設定を書いた
+# https://amateur-engineer-blog.com/zsh-zinit/
+
+# 予測変換
+autoload -zU predict-on
+predict-on
+
+autoload -zU compinit
+compinit
+
+# タイポを教えてくれる
+setopt correct
+# 日本語ファイル名を表示可能にする
+setopt print_eight_bit
+
+HISTFILE=~/.zsh_history
+export SAVEHIST=10000
+# 同時に起動しているzshの間でhistoryを共有
+setopt share_history
+# historyに保存するときに余分なスペースを削除
+setopt hist_reduce_blanks
+# 同じコマンドをhistoryに残さない
+setopt hist_ignore_all_dups
+
+export LANG=ja_JP.UTF-8
