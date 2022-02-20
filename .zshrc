@@ -38,7 +38,8 @@ function execute_from_peco_history() {
     else
         local tac="tail -r"
     fi
-    SELECTED_HISTORY=$(history | $tac | peco --layout bottom-up)
+    SELECTED_HISTORY=$(history | eval $tac | peco --layout bottom-up)
+
     if [ "$SELECTED_HISTORY" != "" ]; then
         # 数字 command...のうち、command...を抽出
         EXTRACTED_COMMAND=$(echo $SELECTED_HISTORY | awk '{for(i=2;i<NF;i++){printf("%s%s",$i,OFS=" ")}print $NF}')
