@@ -122,3 +122,12 @@ setopt hist_reduce_blanks
 setopt hist_ignore_all_dups
 
 export LANG=ja_JP.UTF-8
+
+zinit ice wait lucid
+zinit light zsh-users/zsh-completions
+zinit ice wait lucid
+zinit light zsh-users/zsh-autosuggestions
+zinit ice wait lucid
+zinit light zsh-users/zsh-syntax-highlighting
+# 補完候補をTabや矢印で選択可能
+zstyle ':completion:*:default' menu select=1
