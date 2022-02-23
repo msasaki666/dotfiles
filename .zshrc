@@ -127,7 +127,8 @@ zinit ice wait lucid
 zinit light zsh-users/zsh-completions
 zinit ice wait lucid
 zinit light zsh-users/zsh-autosuggestions
+
+# zsh-syntax-highlightingは最後に読み込む必要がある
+# https://github.com/zsh-users/zsh-syntax-highlighting#why-must-zsh-syntax-highlightingzsh-be-sourced-at-the-end-of-the-zshrc-file
 zinit ice wait lucid
 zinit light zsh-users/zsh-syntax-highlighting
-# 補完候補をTabや矢印で選択可能
-zstyle ':completion:*:default' menu select=1
