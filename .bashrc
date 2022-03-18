@@ -68,6 +68,8 @@ function apply_kube_ps1() {
     fi
 }
 apply_kube_ps1
+# for krew
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
 HISTSIZE=1000
 HISTFILESIZE=1000

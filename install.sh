@@ -42,6 +42,7 @@ link_to_homedir() {
 
 update_preference() {
   source ~/.bashrc
+  source ~/.zshrc
 }
 
 link_to_homedir

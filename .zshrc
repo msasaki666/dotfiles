@@ -55,13 +55,21 @@ set_up_prompt
 
 # 色変更方法: https://qiita.com/wildeagle/items/5da17e007e2c284dc5dd
 function apply_kube_ps1() {
-    KUBE_PS1_PATH="/usr/local/opt/kube-ps1/share/kube-ps1.sh"
-    if [ -e $KUBE_PS1_PATH ]; then
-        source $KUBE_PS1_PATH
-        PS1='$(kube_ps1)'$PS1
-    fi
+    local KUBE_PS1_PATHS=(
+        "/usr/local/opt/kube-ps1/share/kube-ps1.sh"
+        "/opt/homebrew/opt/kube-ps1/share/kube-ps1.sh"
+    )
+    for p in ${KUBE_PS1_PATHS[@]}
+    do
+        if [ -e $p ]; then
+            source $p
+            PS1='$(kube_ps1)'$PS1
+        fi
+    done
 }
 apply_kube_ps1
+# for krew
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
 # -w ファイルがå閉じられてからreturnする
 export EDITOR="code -w"
