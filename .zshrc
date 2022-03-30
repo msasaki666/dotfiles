@@ -109,8 +109,8 @@ zinit light-mode for \
 # https://amateur-engineer-blog.com/zsh-zinit/
 
 # 予測変換
-autoload -zU predict-on
-predict-on
+# autoload -zU predict-on
+# predict-on
 
 autoload -zU compinit
 compinit
@@ -131,10 +131,10 @@ setopt hist_ignore_all_dups
 
 export LANG=ja_JP.UTF-8
 
-zinit ice wait lucid
-zinit light zsh-users/zsh-completions
-zinit ice wait lucid
-zinit light zsh-users/zsh-autosuggestions
+# zinit ice wait lucid
+# zinit light zsh-users/zsh-completions
+# zinit ice wait lucid
+# zinit light zsh-users/zsh-autosuggestions
 
 # zsh-syntax-highlightingは最後に読み込む必要がある
 # https://github.com/zsh-users/zsh-syntax-highlighting#why-must-zsh-syntax-highlightingzsh-be-sourced-at-the-end-of-the-zshrc-file
