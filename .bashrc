@@ -84,3 +84,7 @@ set_bundle_editor_for_remote_container() {
     fi
 }
 set_bundle_editor_for_remote_container
+
+if which rbenv > /dev/null; then
+ eval "$(rbenv init -)"
+fi
