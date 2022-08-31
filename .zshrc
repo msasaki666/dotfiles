@@ -144,3 +144,5 @@ zinit light zsh-users/zsh-syntax-highlighting
 if which rbenv > /dev/null; then
  eval "$(rbenv init -)"
 fi
+
+export PATH="/usr/local/opt/openjdk/bin:$PATH"

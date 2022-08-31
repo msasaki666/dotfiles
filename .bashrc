@@ -88,3 +88,5 @@ set_bundle_editor_for_remote_container
 if which rbenv > /dev/null; then
  eval "$(rbenv init -)"
 fi
+
+export PATH="/usr/local/opt/openjdk/bin:$PATH"
