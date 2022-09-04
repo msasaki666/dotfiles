@@ -90,3 +90,7 @@ if which rbenv > /dev/null; then
 fi
 
 export PATH="/usr/local/opt/openjdk/bin:$PATH"
+
+if which go > /dev/null; then
+    export PATH="$PATH:$(go env GOPATH)/bin"
+fi
