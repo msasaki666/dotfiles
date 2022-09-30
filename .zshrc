@@ -150,3 +150,6 @@ export PATH="/usr/local/opt/openjdk/bin:$PATH"
 if which go > /dev/null; then
     export PATH="$PATH:$(go env GOPATH)/bin"
 fi
+
+# https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke
+export USE_GKE_GCLOUD_AUTH_PLUGIN=False
