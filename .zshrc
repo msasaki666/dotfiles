@@ -1,3 +1,5 @@
+# Fig pre block. Keep at the top of this file.
+[[ -f "$HOME/.fig/shell/zshrc.pre.zsh" ]] && builtin source "$HOME/.fig/shell/zshrc.pre.zsh"
 alias g='git'
 alias gcm='git checkout master'
 alias gdf='git diff'
@@ -154,3 +156,6 @@ fi
 # https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke
 export USE_GKE_GCLOUD_AUTH_PLUGIN=False
 export PATH="$PATH:/opt/metasploit-framework/bin"
+
+# Fig post block. Keep at the bottom of this file.
+[[ -f "$HOME/.fig/shell/zshrc.post.zsh" ]] && builtin source "$HOME/.fig/shell/zshrc.post.zsh"

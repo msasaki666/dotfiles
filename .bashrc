@@ -1,3 +1,5 @@
+# Fig pre block. Keep at the top of this file.
+[[ -f "$HOME/.fig/shell/bashrc.pre.bash" ]] && builtin source "$HOME/.fig/shell/bashrc.pre.bash"
 # シェル起動時に１回、実行される。
 # コマンドライン上でbashと叩くと再度.bashrcが読み込まれる。（.bash_profileは読まれない）
 
@@ -98,3 +100,6 @@ fi
 # https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke
 export USE_GKE_GCLOUD_AUTH_PLUGIN=False
 export PATH="$PATH:/opt/metasploit-framework/bin"
+
+# Fig post block. Keep at the bottom of this file.
+[[ -f "$HOME/.fig/shell/bashrc.post.bash" ]] && builtin source "$HOME/.fig/shell/bashrc.post.bash"
