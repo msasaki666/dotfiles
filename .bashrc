@@ -103,3 +103,7 @@ export PATH="$PATH:/opt/metasploit-framework/bin"
 
 # Fig post block. Keep at the bottom of this file.
 [[ -f "$HOME/.fig/shell/bashrc.post.bash" ]] && builtin source "$HOME/.fig/shell/bashrc.post.bash"
+export PATH="$PATH:/usr/local/lib/flutter/bin"
+
+export GEM_HOME=$HOME/.gem
+export PATH=$GEM_HOME/bin:$PATH
