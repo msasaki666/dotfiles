@@ -20,7 +20,6 @@ alias gaa='git add .'
 alias gch='git checkout'
 alias grprs='t=`git describe --abbrev=0 --tags`;echo "Since $t:";echo;git log $t..origin/master --merges|grep "^    .\+"|grep -v Merge|sed -e"s/    //g"'
 alias gst='git status'
-
 alias d='docker'
 alias dc='docker compose'
 alias dcd='docker compose -f docker-compose.dev.yml'
@@ -29,14 +28,11 @@ alias dcu='docker compose up'
 alias dcb='docker compose build'
 alias dce='docker compose exec'
 alias dex='docker exec -it'
-
 alias k='kubectl'
-
 alias rdm='rails db:migrate'
 alias rdr='rails db:rollback'
-
 alias gore='gore -autoimport'
-
+alias reload="source ~/.bashrc"
 
 function execute_from_peco_history() {
     if which tac >/dev/null; then
