@@ -95,7 +95,7 @@ if which go > /dev/null; then
 fi
 
 # https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke
-export USE_GKE_GCLOUD_AUTH_PLUGIN=False
+export USE_GKE_GCLOUD_AUTH_PLUGIN=True
 export PATH="$PATH:/opt/metasploit-framework/bin"
 export PATH="$PATH:/usr/local/lib/flutter/bin"
 export GEM_HOME=$HOME/.gem
