@@ -160,3 +160,10 @@ export PATH=$GEM_HOME/bin:$PATH
 
 # Fig post block. Keep at the bottom of this file.
 [[ -f "$HOME/.fig/shell/zshrc.post.zsh" ]] && builtin source "$HOME/.fig/shell/zshrc.post.zsh"
+export VOLTA_HOME="$HOME/.volta"
+export PATH="$VOLTA_HOME/bin:$PATH"
+
+# pnpm
+export PNPM_HOME="/Users/sasakimotoaki/Library/pnpm"
+export PATH="$PNPM_HOME:$PATH"
+# pnpm end
