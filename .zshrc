@@ -157,6 +157,9 @@ export PATH="$PATH:/opt/metasploit-framework/bin"
 export PATH="$PATH:/usr/local/lib/flutter/bin"
 export GEM_HOME=$HOME/.gem
 export PATH=$GEM_HOME/bin:$PATH
+if which pack > /dev/null; then
+    . $(pack completion --shell zsh)
+fi
 
 # Fig post block. Keep at the bottom of this file.
 [[ -f "$HOME/.fig/shell/zshrc.post.zsh" ]] && builtin source "$HOME/.fig/shell/zshrc.post.zsh"
