@@ -29,6 +29,7 @@ alias dex='docker exec -it'
 alias k='kubectl'
 alias rdm='rails db:migrate'
 alias rdr='rails db:rollback'
+alias docked='docker run --rm -it -v ${PWD}:/rails -v ruby-bundle-cache:/bundle -p 3000:3000 ghcr.io/rails/cli'
 alias gore='gore -autoimport'
 alias reload="source ~/.zshrc"
 
