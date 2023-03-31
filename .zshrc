@@ -174,3 +174,6 @@ export PATH="$VOLTA_HOME/bin:$PATH"
 export PNPM_HOME="/Users/sasakimotoaki/Library/pnpm"
 export PATH="$PNPM_HOME:$PATH"
 # pnpm end
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /opt/homebrew/bin/terraform terraform
