@@ -177,3 +177,7 @@ export PATH="$PNPM_HOME:$PATH"
 
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /opt/homebrew/bin/terraform terraform
+
+if [ -f ~/.config/op/plugins.sh ]; then
+  source ~/.config/op/plugins.sh
+fi
