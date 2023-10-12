@@ -117,3 +117,8 @@ export PATH="$VOLTA_HOME/bin:$PATH"
 if [ -f ~/.config/op/plugins.sh ]; then
   source ~/.config/op/plugins.sh
 fi
+
+. "$HOME/.cargo/env"
+
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+export PATH="/opt/homebrew/opt/curl/bin:$PATH"
