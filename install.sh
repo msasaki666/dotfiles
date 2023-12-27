@@ -22,7 +22,7 @@ link_to_homedir() {
     # ?: 任意の一文字にマッチ
     # *: 長さ0以上の文字列にマッチ
     for f in $dotdir/.??*; do
-      local filename=`basename $f`
+      local filename=$(basename $f)
       # -L: ファイルが存在し、シンボリックリンクであれば真
       if [[ -L "$HOME/$filename" ]];then
         command rm -f "$HOME/$filename"
@@ -41,8 +41,13 @@ link_to_homedir() {
 }
 
 update_preference() {
-  source ~/.bashrc
-  source ~/.zshrc
+  if [[ "$SHELL" == "/bin/bash" ]];then
+    command source "$HOME/.bashrc"
+  elif [[ "$SHELL" == "/bin/zsh" ]];then
+    command source "$HOME/.zshrc"
+  else
+    command echo "unknown shell"
+  fi
 }
 
 link_to_homedir
