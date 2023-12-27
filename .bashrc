@@ -118,7 +118,9 @@ if [ -f ~/.config/op/plugins.sh ]; then
   source ~/.config/op/plugins.sh
 fi
 
-. "$HOME/.cargo/env"
+if [ -f "$HOME"/.cargo/env ]; then
+  . "$HOME/.cargo/env"
+fi
 
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 export PATH="/opt/homebrew/opt/curl/bin:$PATH"
