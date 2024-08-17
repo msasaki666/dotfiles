@@ -165,15 +165,13 @@ if which pack > /dev/null; then
     . $(pack completion --shell zsh)
 fi
 
-# Fig post block. Keep at the bottom of this file.
-[[ -f "$HOME/.fig/shell/zshrc.post.zsh" ]] && builtin source "$HOME/.fig/shell/zshrc.post.zsh"
-export VOLTA_HOME="$HOME/.volta"
-export PATH="$VOLTA_HOME/bin:$PATH"
-
 # pnpm
 export PNPM_HOME="/Users/sasakimotoaki/Library/pnpm"
 export PATH="$PNPM_HOME:$PATH"
 # pnpm end
+
+export VOLTA_HOME="$HOME/.volta"
+export PATH="$VOLTA_HOME/bin:$PATH"
 
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /opt/homebrew/bin/terraform terraform
