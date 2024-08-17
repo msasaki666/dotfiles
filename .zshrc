@@ -188,3 +188,9 @@ fi
 
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 export PATH="/opt/homebrew/opt/curl/bin:$PATH"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/sasakimotoaki/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/sasakimotoaki/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/sasakimotoaki/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/sasakimotoaki/google-cloud-sdk/completion.zsh.inc'; fi
