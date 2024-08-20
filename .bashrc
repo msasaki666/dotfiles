@@ -122,5 +122,3 @@ fi
 
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 export PATH="/opt/homebrew/opt/curl/bin:$PATH"
-
-. "$HOME/.cargo/env"
