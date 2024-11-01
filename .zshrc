@@ -184,6 +184,10 @@ if [ -f "$HOME"/.cargo/env ]; then
   . "$HOME/.cargo/env"
 fi
 
+if [ -f "$HOME"/.ghcup/env ]; then
+  . "$HOME/.ghcup/env"
+fi
+
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 export PATH="/opt/homebrew/opt/curl/bin:$PATH"
 
