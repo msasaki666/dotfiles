@@ -35,7 +35,7 @@ alias be='bundle exec'
 alias ber='bundle exec rails'
 alias docked='docker run --rm -it -v ${PWD}:/rails -v ruby-bundle-cache:/bundle -p 3000:3000 ghcr.io/rails/cli'
 alias gore='gore -autoimport'
-alias reload="source ~/.bashrc"
+alias reload="source ~/.zshrc"
 
 
 function execute_from_peco_history() {
