@@ -1,45 +1,15 @@
 # Fig pre block. Keep at the top of this file.
 [[ -f "$HOME/.fig/shell/bashrc.pre.bash" ]] && builtin source "$HOME/.fig/shell/bashrc.pre.bash"
-# シェル起動時に１回、実行される。
-# コマンドライン上でbashと叩くと再度.bashrcが読み込まれる。（.bash_profileは読まれない）
 
-alias g='git'
-alias gcm='git checkout master'
-alias gdf='git diff'
-alias gcp='git cherry-pick'
-alias gb='git branch'
-alias gds='git ds'
-alias gf='git fetch'
-alias gg='git grep -n'
-alias gmt='git mergetool'
-alias gl='git lg'
-alias glo='git log --oneline'
-alias gc='git commit'
-alias ga='git add'
-alias gaa='git add .'
-alias gch='git checkout'
-alias grprs='t=`git describe --abbrev=0 --tags`;echo "Since $t:";echo;git log $t..origin/master --merges|grep "^    .\+"|grep -v Merge|sed -e"s/    //g"'
-alias gst='git status'
-alias d='docker'
-alias dc='docker compose'
-alias dcd='docker compose -f docker-compose.dev.yml'
-alias dct='docker compose -f docker-compose.test.yml'
-alias dcdc='docker compose -f docker-compose.devcontainer.yml'
-alias dcu='docker compose up'
-alias dcb='docker compose build'
-alias dce='docker compose exec'
-alias dex='docker exec -it'
-alias k='kubectl'
-alias rdm='bundle exec rails db:migrate'
-alias rdr='bundle exec rails db:rollback'
-alias b='bundle'
-alias be='bundle exec'
-alias ber='bundle exec rails'
-alias docked='docker run --rm -it -v ${PWD}:/rails -v ruby-bundle-cache:/bundle -p 3000:3000 ghcr.io/rails/cli'
-alias gore='gore -autoimport'
-alias reload="source ~/.bashrc"
+# shellcheck disable=SC1090
+# shellcheck disable=SC1091
+. ./scripts/aliases.sh
 
 function execute_from_peco_history() {
+    if ! which peco >/dev/null; then
+        echo "pecoがインストールされていません。"
+        return
+    fi
     if which tac >/dev/null; then
         local tac="tac"
     else
@@ -80,9 +50,9 @@ HISTFILESIZE=1000
 # -w ファイルが閉じられてからreturnする
 export EDITOR="code -w"
 
-set_bundle_editor_for_remote_container() {
+function set_bundle_editor_for_remote_container() {
     # vscode remote containerの時はbundle openの時に、code -wだとうまく動かないので
-    if [ -e $REMOTE_CONTAINERS ]; then
+    if [ -e "$REMOTE_CONTAINERS" ]; then
         export BUNDLER_EDITOR=code
     fi
 }
@@ -95,6 +65,7 @@ fi
 export PATH="/usr/local/opt/openjdk/bin:$PATH"
 
 if which go > /dev/null; then
+    # shellcheck disable=SC2155
     export PATH="$PATH:$(go env GOPATH)/bin"
 fi
 
@@ -106,23 +77,32 @@ export GEM_HOME=$HOME/.gem
 export PATH=$GEM_HOME/bin:$PATH
 
 if which pack > /dev/null; then
-    . $(pack completion)
+    # shellcheck disable=SC1090
+    . "$(pack completion)"
 fi
 
 export VOLTA_HOME="$HOME/.volta"
 export PATH="$VOLTA_HOME/bin:$PATH"
 
 if [ -f ~/.config/op/plugins.sh ]; then
+  # shellcheck disable=SC1090
   source ~/.config/op/plugins.sh
 fi
 
 if [ -f "$HOME"/.cargo/env ]; then
+  # shellcheck disable=SC1091
   . "$HOME/.cargo/env"
 fi
 
 if [ -f "$HOME"/.ghcup/env ]; then
+  # shellcheck disable=SC1091
   . "$HOME/.ghcup/env"
 fi
 
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 export PATH="/opt/homebrew/opt/curl/bin:$PATH"
+
+
+if which task > /dev/null; then
+    eval "$(task --completion bash)"
+fi

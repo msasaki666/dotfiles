@@ -1,42 +1,15 @@
 # Fig pre block. Keep at the top of this file.
 [[ -f "$HOME/.fig/shell/zshrc.pre.zsh" ]] && builtin source "$HOME/.fig/shell/zshrc.pre.zsh"
-alias g='git'
-alias gcm='git checkout master'
-alias gdf='git diff'
-alias gcp='git cherry-pick'
-alias gb='git branch'
-alias gds='git ds'
-alias gf='git fetch'
-alias gg='git grep -n'
-alias gmt='git mergetool'
-alias gl='git lg'
-alias glo='git log --oneline'
-alias gc='git commit'
-alias ga='git add'
-alias gaa='git add .'
-alias gch='git checkout'
-alias grprs='t=`git describe --abbrev=0 --tags`;echo "Since $t:";echo;git log $t..origin/master --merges|grep "^    .\+"|grep -v Merge|sed -e"s/    //g"'
-alias gst='git status'
-alias d='docker'
-alias dc='docker compose'
-alias dcd='docker compose -f docker-compose.dev.yml'
-alias dct='docker compose -f docker-compose.test.yml'
-alias dcdc='docker compose -f docker-compose.devcontainer.yml'
-alias dcu='docker compose up'
-alias dcb='docker compose build'
-alias dce='docker compose exec'
-alias dex='docker exec -it'
-alias k='kubectl'
-alias rdm='bundle exec rails db:migrate'
-alias rdr='bundle exec rails db:rollback'
-alias b='bundle'
-alias be='bundle exec'
-alias ber='bundle exec rails'
-alias docked='docker run --rm -it -v ${PWD}:/rails -v ruby-bundle-cache:/bundle -p 3000:3000 ghcr.io/rails/cli'
-alias gore='gore -autoimport'
-alias reload="source ~/.zshrc"
+
+# shellcheck disable=SC1090
+# shellcheck disable=SC1091
+. ./scripts/aliases.sh
 
 function execute_from_peco_history() {
+    if ! which peco >/dev/null; then
+        echo "pecoがインストールされていません。"
+        return
+    fi
     if which tac >/dev/null; then
         local tac="tac"
     else
@@ -196,3 +169,11 @@ if [ -f '/Users/sasakimotoaki/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/s
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/sasakimotoaki/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/sasakimotoaki/google-cloud-sdk/completion.zsh.inc'; fi
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+if which task > /dev/null; then
+    eval "$(task --completion zsh)"
+fi
