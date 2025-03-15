@@ -138,4 +138,5 @@ export PATH="/opt/homebrew/opt/curl/bin:$PATH"
 
 if which task > /dev/null; then
     eval "$(task --completion bash)"
+    alias t='task'
 fi

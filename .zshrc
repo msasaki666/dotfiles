@@ -209,4 +209,5 @@ export NVM_DIR="$HOME/.nvm"
 
 if which task > /dev/null; then
     eval "$(task --completion zsh)"
+    alias t='task'
 fi
