@@ -38,7 +38,7 @@ link_to_homedir() {
 
     if [ ! -f "$HOME/Taskfile.yml" ];then
       echo "copying Taskfile.yml..."
-      command cp "$dotdir/Taskfile.yml" "$HOME/Taskfile.yml"
+      command cp "$dotdir/Taskfile.concrete.yml" "$HOME/Taskfile.yml"
     fi
   else
     command echo "home directory is same as install src"
