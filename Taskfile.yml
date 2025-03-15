@@ -1,0 +1,9 @@
+# https://taskfile.dev
+# baseをincludeして使う。各端末ごとに作成する。
+
+version: '3'
+includes:
+  base:
+    taskfile: ./Taskfile.base.yml
+    dir: ./
+    internal: true

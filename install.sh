@@ -10,7 +10,7 @@ link_to_homedir() {
   local backupdirname=".dotbackup"
   if [ ! -d "$HOME/$backupdirname" ];then
     # ~と$HOMEは、同じ場所を示すが、""で囲んでも意味を成すのは$HOME
-    command echo "$HOME/$backupdirname not found. Auto Make it"
+    command echo "$HOME/$backupdirname not found. making it."
     command mkdir "$HOME/$backupdirname"
   fi
 
@@ -21,7 +21,7 @@ link_to_homedir() {
   if [[ "$HOME" != "$dotdir" ]];then
     # ?: 任意の一文字にマッチ
     # *: 長さ0以上の文字列にマッチ
-    for f in $dotdir/.??*; do
+    for f in "$dotdir"/.??* "$dotdir"/Taskfile.base.yml; do
       local filename=$(basename $f)
       # -L: ファイルが存在し、シンボリックリンクであれば真
       if [[ -L "$HOME/$filename" ]];then
@@ -35,16 +35,22 @@ link_to_homedir() {
       # -f: 同じ名前のファイルがあっても強制的に上書き
       command ln -snf $f $HOME
     done
+
+    if [ ! -f "$HOME/Taskfile.yml" ];then
+      echo "copying Taskfile.yml..."
+      command cp "$dotdir/Taskfile.yml" "$HOME/Taskfile.yml"
+    fi
   else
-    command echo "same install src dest"
+    command echo "home directory is same as install src"
   fi
 }
+
 
 update_preference() {
   if [[ "$SHELL" == "/bin/bash" ]];then
     command source "$HOME/.bashrc"
   elif [[ "$SHELL" == "/bin/zsh" ]];then
-    command source "$HOME/.zshrc"
+    command zsh -c "source $HOME/.zshrc"
   else
     command echo "unknown shell"
   fi

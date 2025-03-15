@@ -1,0 +1,34 @@
+# https://taskfile.dev
+# 端末によらない共通設定。これをincludeして使う。
+
+version: '3'
+
+tasks:
+  default:
+    cmds:
+      - task --list-all
+    silent: true
+  # エイリアスでワイルドカードが使えない。エイリアス->実際のタスク名に変換するためのタスクの実装例
+  # ae*:
+  #   desc: 'proxy to aws-exec-{environment}-{service}'
+  #   requires:
+  #     vars:
+  #       - SERVICE_ALIAS_MAPPING
+  #       - ENVIRONMENT_ALIAS_MAPPING
+  #   vars:
+  #     SERVICE_NAME: '{{index (fromJson .SERVICE_ALIAS_MAPPING) .SERVICE_ALIAS}}'
+  #     ENVIRONMENT_NAME: '{{index (fromJson .ENVIRONMENT_ALIAS_MAPPING) .ENVIRONMENT_ALIAS}}'
+  #   cmds:
+  #     - task: aws-exec-{{.ENVIRONMENT_NAME}}-{{.SERVICE_NAME}}
+  aws-exec-*-*:
+    desc: 環境名とアプリケーション名をもとにECS Taskに接続するための基本的なタスク
+    requires:
+      vars:
+        - ECS_CONTAINER
+        - ECS_CLUSTER
+        - ECS_SERVICE
+        - AWS_PROFILE
+    cmds:
+      - aws ecs execute-command --cluster {{.ECS_CLUSTER}} --task $(aws ecs list-tasks --cluster {{.ECS_CLUSTER}} --profile {{.AWS_PROFILE}} --service-name {{.ECS_SERVICE}} | jq -r '.taskArns[0]') --container {{.ECS_CONTAINER}} --interactive --command "{{.SHELL}}" --profile {{.AWS_PROFILE}}
+    vars:
+      SHELL: '/bin/bash'
