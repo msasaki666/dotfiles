@@ -7,3 +7,9 @@ includes:
     taskfile: ./Taskfile.base.yml
     dir: ./
     internal: true
+
+
+tasks:
+  default:
+    cmds:
+      - task: base:default
