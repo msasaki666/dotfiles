@@ -140,3 +140,6 @@ if which task > /dev/null; then
     eval "$(task --completion bash)"
     alias t='task'
 fi
+
+# Added by Windsurf
+export PATH="$HOME/.codeium/windsurf/bin:$PATH"

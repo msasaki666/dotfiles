@@ -172,8 +172,13 @@ if which pack > /dev/null; then
 fi
 
 # pnpm
-export PNPM_HOME="/Users/sasakimotoaki/Library/pnpm"
-export PATH="$PNPM_HOME:$PATH"
+# osがmacで、pnpmコマンドが存在する場合は、pnpmのパスを設定
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    if which pnpm > /dev/null; then
+        export PNPM_HOME="$HOME/Library/pnpm"
+        export PATH="$PNPM_HOME:$PATH"
+    fi
+fi
 # pnpm end
 
 export VOLTA_HOME="$HOME/.volta"
@@ -198,10 +203,10 @@ export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
 export PATH="/opt/homebrew/opt/curl/bin:$PATH"
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/sasakimotoaki/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/sasakimotoaki/google-cloud-sdk/path.zsh.inc'; fi
+if [ -f '$HOME/google-cloud-sdk/path.zsh.inc' ]; then . '$HOME/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/Users/sasakimotoaki/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/sasakimotoaki/google-cloud-sdk/completion.zsh.inc'; fi
+if [ -f '$HOME/google-cloud-sdk/completion.zsh.inc' ]; then . '$HOME/google-cloud-sdk/completion.zsh.inc'; fi
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -211,3 +216,6 @@ if which task > /dev/null; then
     eval "$(task --completion zsh)"
     alias t='task'
 fi
+
+# Added by Windsurf
+export PATH="$HOME/.codeium/windsurf/bin:$PATH"
