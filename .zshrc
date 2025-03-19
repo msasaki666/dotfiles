@@ -219,3 +219,7 @@ fi
 
 # Added by Windsurf
 export PATH="$HOME/.codeium/windsurf/bin:$PATH"
+
+if which firefly > /dev/null; then
+    alias ff='firefly'
+fi
