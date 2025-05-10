@@ -147,3 +147,7 @@ export PATH="$HOME/.codeium/windsurf/bin:$PATH"
 if which firefly > /dev/null; then
     alias ff='firefly'
 fi
+
+if [ -f "$HOME/.local/bin/env" ]; then
+    . "$HOME/.local/bin/env"
+fi
