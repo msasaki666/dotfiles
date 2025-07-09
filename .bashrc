@@ -20,6 +20,7 @@ alias grprs='t=`git describe --abbrev=0 --tags`;echo "Since $t:";echo;git log $t
 alias gst='git status'
 alias d='docker'
 alias dc='docker compose'
+alias dcm='docker compose -f compose.me.yaml'
 alias dcd='docker compose -f docker-compose.dev.yml'
 alias dct='docker compose -f docker-compose.test.yml'
 alias dcdc='docker compose -f docker-compose.devcontainer.yml'
