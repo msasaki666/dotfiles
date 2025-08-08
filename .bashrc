@@ -156,3 +156,5 @@ fi
 if [ -f "$HOME/config/op/plugins.sh" ]; then
     . "$HOME/.config/op/plugins.sh"
 fi
+
+export PATH="$HOME/.local/bin:$PATH"
