@@ -16,13 +16,15 @@ link_to_homedir() {
 
   # dirnameは、パスからディレクトリ部分のみを取り出す
   # BASH_SOURCE[0]には実行したスクリプトのパスが入っている
-  local script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
-  local dotdir=$script_dir
+  local script_dir
+  script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+  local dotdir="$script_dir"
   if [[ "$HOME" != "$dotdir" ]];then
     # ?: 任意の一文字にマッチ
     # *: 長さ0以上の文字列にマッチ
     for f in "$dotdir"/.??* "$dotdir"/Taskfile.base.yml; do
-      local filename=$(basename $f)
+      local filename
+      filename=$(basename "$f")
       # -L: ファイルが存在し、シンボリックリンクであれば真
       if [[ -L "$HOME/$filename" ]];then
         command rm -f "$HOME/$filename"
@@ -33,7 +35,7 @@ link_to_homedir() {
       # -s: ハードリンクではなく、シンボリックリンクを作る
       # -n: リンクの作成場所として指定したディレクトリがシンボリックリンクだった場合、参照先にリンクを作るのではなく、シンボリックリンクそのものを置き換える（-fと組み合わせて使用）
       # -f: 同じ名前のファイルがあっても強制的に上書き
-      command ln -snf $f $HOME
+      command ln -snf "$f" "$HOME"
     done
 
     if [ ! -f "$HOME/Taskfile.yml" ];then
@@ -48,9 +50,13 @@ link_to_homedir() {
 
 update_preference() {
   if [[ "$SHELL" == "/bin/bash" ]];then
-    command source "$HOME/.bashrc"
+    set +u
+    command source "$HOME/.bashrc" || true
+    set -u
   elif [[ "$SHELL" == "/bin/zsh" ]];then
-    command zsh -c "source $HOME/.zshrc"
+    set +u
+    command zsh -c "source \"$HOME/.zshrc\"" || true
+    set -u
   else
     command echo "unknown shell"
   fi

@@ -1,0 +1,18 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run shellcheck
+        run: shellcheck $(git ls-files '*.sh')
+      - name: Test install script
+        env:
+          HOME: ${{ runner.temp }}
+        run: bash install.sh
