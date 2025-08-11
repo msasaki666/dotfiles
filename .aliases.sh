@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # Common aliases for Bash and Zsh
 alias g='git'
 alias gcm='git checkout master'
@@ -14,7 +15,15 @@ alias gc='git commit'
 alias ga='git add'
 alias gaa='git add .'
 alias gch='git checkout'
-alias grprs='t=`git describe --abbrev=0 --tags`;echo "Since $t:";echo;git log $t..origin/master --merges|grep "^    .\\+"|grep -v Merge|sed -e"s/    //g"'
+grprs() {
+  t=$(git describe --abbrev=0 --tags)
+  echo "Since $t:"
+  echo
+  git log "$t"..origin/master --merges \
+    | grep "^    .\\+" \
+    | grep -v Merge \
+    | sed -e "s/    //g"
+}
 alias gst='git status'
 alias d='docker'
 alias dc='docker compose'
