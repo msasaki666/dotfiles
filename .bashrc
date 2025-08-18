@@ -24,7 +24,11 @@ function execute_from_peco_history() {
         history -s $EXTRACTED_COMMAND
     fi
 }
-bind -x '"\C-r": execute_from_peco_history'
+
+# 対話シェルの場合のみ bind を有効化
+if [[ $- == *i* ]]; then
+  bind -x '"\C-r": execute_from_peco_history'
+fi
 
 # PS1のデフォルトは、\h:\W \u\$
 function set_up_prompt() {

@@ -19,10 +19,15 @@ function execute_from_peco_history() {
   CURSOR=$#BUFFER
   zle reset-prompt
 }
+if [[ -o zle ]]; then
 # 関数をwidgetに登録
-zle -N execute_from_peco_history
-# widgetを特定のキー入力に登録
-bindkey '^r' execute_from_peco_history
+  zle -N execute_from_peco_history
+fi
+# 対話シェルかつ ZLE が有効なときだけ bindkey を有効化
+if [[ -o interactive ]] && [[ -o zle ]]; then
+    # widgetを特定のキー入力に登録
+    bindkey '^r' execute_from_peco_history
+fi
 
 # PS1のデフォルトは、\h:\W \u\$
 function set_up_prompt() {
