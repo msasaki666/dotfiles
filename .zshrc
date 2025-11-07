@@ -244,7 +244,6 @@ export PATH="$HOME/.local/bin:$PATH"
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
-
-if which podman > /dev/null; then
-    export DOCKER_HOST=unix://$(podman machine inspect $(podman machine list --format '{{.Name}}') --format '{{.ConnectionInfo.PodmanSocket.Path}}')
+if which starship > /dev/null; then
+  eval "$(starship init zsh)"
 fi
