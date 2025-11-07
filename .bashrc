@@ -172,5 +172,5 @@ export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
 if which starship > /dev/null; then
-  eval "$(starship init zsh)"
+  eval "$(starship init bash)"
 fi
