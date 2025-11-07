@@ -243,7 +243,3 @@ export PATH="$HOME/.local/bin:$PATH"
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
-
-if which starship > /dev/null; then
-  eval "$(starship init zsh)"
-fi
