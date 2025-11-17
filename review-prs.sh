@@ -3,7 +3,7 @@
 # deps: gh, jq, column(optional), curl(optional for --all)
 set -euo pipefail
 
-REVIEWER="msasaki666"
+USER="msasaki666"
 FORMAT="table"             # table|tsv|md
 EXTRA_QUERY=""             # e.g. "-is:draft"
 ALL_PAGES="false"          # --all: fetch all pages via curl (needs GH_TOKEN)
@@ -15,7 +15,7 @@ Usage:
   review-prs.sh [options] --repo OWNER/NAME [--repo OWNER/NAME]...
 
 Options:
-  --reviewer USER           指名レビュー先（既定: msasaki666）
+  --user USER           指名レビュー先（既定: msasaki666）
   --repo OWNER/NAME         対象repo（複数指定可, OR条件）※必須
   --extra "QUERY_PART"      追加フィルタ（例: "-is:draft"）
   --format table|tsv|md     出力形式（既定: table）
@@ -35,7 +35,7 @@ USAGE
 REPOS=()
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --reviewer) REVIEWER="$2"; shift 2;;
+    --user) USER="$2"; shift 2;;
     --repo) REPOS+=("$2"); shift 2;;
     --extra) EXTRA_QUERY="$2"; shift 2;;
     --format) FORMAT="$2"; shift 2;;
@@ -102,7 +102,7 @@ fetch_and_display_prs() {
   count=$(jq -r '.total_count' <<<"$json")
 
   if [[ "$count" -eq 0 ]]; then
-    echo "${section_title}（@${REVIEWER} / repos: ${REPOS[*]}）: 該当なし"
+    echo "${section_title}（@${USER} / repos: ${REPOS[*]}）: 該当なし"
     return
   fi
 
@@ -122,7 +122,7 @@ fetch_and_display_prs() {
     | @tsv
   ' <<<"$sorted")
 
-  echo "${section_title}（@${REVIEWER} / repos: ${REPOS[*]}）: ${count}件"
+  echo "${section_title}（@${USER} / repos: ${REPOS[*]}）: ${count}件"
   echo ""
 
   case "$FORMAT" in
@@ -147,12 +147,12 @@ fetch_and_display_prs() {
 # Main execution
 if [[ "$INCLUDE_REVIEWING" == "true" ]]; then
   # Display both: review-requested and reviewing
-  fetch_and_display_prs "user-review-requested:${REVIEWER}" "レビュー待ちPR"
+  fetch_and_display_prs "user-review-requested:${USER}" "レビュー待ちPR"
   echo ""
   echo "---"
   echo ""
-  fetch_and_display_prs "reviewed-by:${REVIEWER} -author:${REVIEWER}" "レビュー中PR"
+  fetch_and_display_prs "reviewed-by:${USER} -author:${USER}" "レビュー中PR"
 else
   # Default: only review-requested
-  fetch_and_display_prs "user-review-requested:${REVIEWER}" "レビュー待ちPR"
+  fetch_and_display_prs "user-review-requested:${USER}" "レビュー待ちPR"
 fi
