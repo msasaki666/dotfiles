@@ -151,7 +151,7 @@ if [[ "$INCLUDE_REVIEWING" == "true" ]]; then
   echo ""
   echo "---"
   echo ""
-  fetch_and_display_prs "reviewed-by:${REVIEWER}" "レビュー中PR"
+  fetch_and_display_prs "reviewed-by:${REVIEWER} -author:${REVIEWER}" "レビュー中PR"
 else
   # Default: only review-requested
   fetch_and_display_prs "user-review-requested:${REVIEWER}" "レビュー待ちPR"
