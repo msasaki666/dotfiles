@@ -90,6 +90,7 @@ fetch_all_pages_with_curl() {
 fetch_and_display_prs() {
   local query_condition="$1"
   local section_title="$2"
+  local show_status="${3:-false}"
 
   local query="is:open is:pr ${query_condition} ${EXTRA_QUERY} ${REPO_QUERY}"
   local first_url
@@ -112,38 +113,74 @@ fetch_and_display_prs() {
   fi
 
   local sorted
-  sorted=$(jq '.items | sort_by(.updated_at) | reverse' <<<"$json")
+  if [[ "$show_status" == "true" ]]; then
+    # Sort by draft status (false/open first, true/draft later), then by updated_at descending
+    sorted=$(jq '.items | sort_by(.draft, -(.updated_at | fromdateiso8601))' <<<"$json")
+  else
+    sorted=$(jq '.items | sort_by(.updated_at) | reverse' <<<"$json")
+  fi
 
   local tsv
-  tsv=$(jq -r '
-    .[]
-    | [
-        .title,
-        (.repository_url | sub("https://api.github.com/repos/"; "")),
-        .user.login,
-        ((.updated_at | fromdateiso8601) + (9*60*60) | strftime("%Y-%m-%d %H:%M")),
-        .html_url
-      ]
-    | @tsv
-  ' <<<"$sorted")
+  if [[ "$show_status" == "true" ]]; then
+    tsv=$(jq -r '
+      .[]
+      | [
+          .title,
+          (.repository_url | sub("https://api.github.com/repos/"; "")),
+          .user.login,
+          (if .draft then "draft" else "open" end),
+          ((.updated_at | fromdateiso8601) + (9*60*60) | strftime("%Y-%m-%d %H:%M")),
+          .html_url
+        ]
+      | @tsv
+    ' <<<"$sorted")
+  else
+    tsv=$(jq -r '
+      .[]
+      | [
+          .title,
+          (.repository_url | sub("https://api.github.com/repos/"; "")),
+          .user.login,
+          ((.updated_at | fromdateiso8601) + (9*60*60) | strftime("%Y-%m-%d %H:%M")),
+          .html_url
+        ]
+      | @tsv
+    ' <<<"$sorted")
+  fi
 
   echo "${section_title}（@${USER} / repos: ${REPOS[*]}）: ${count}件"
   echo ""
 
   case "$FORMAT" in
     table)
-      { printf '%s\t%s\t%s\t%s\t%s\n' "Title" "Repo" "Author" "Last Updated (JST)" "Link"
-        printf '%s\n' "$tsv"
-      } | column -t -s $'\t'
+      if [[ "$show_status" == "true" ]]; then
+        { printf '%s\t%s\t%s\t%s\t%s\t%s\n' "Title" "Repo" "Author" "Status" "Last Updated (JST)" "Link"
+          printf '%s\n' "$tsv"
+        } | column -t -s $'\t'
+      else
+        { printf '%s\t%s\t%s\t%s\t%s\n' "Title" "Repo" "Author" "Last Updated (JST)" "Link"
+          printf '%s\n' "$tsv"
+        } | column -t -s $'\t'
+      fi
       ;;
     tsv)
-      printf '%s\t%s\t%s\t%s\t%s\n' "Title" "Repo" "Author" "Last Updated (JST)" "Link"
+      if [[ "$show_status" == "true" ]]; then
+        printf '%s\t%s\t%s\t%s\t%s\t%s\n' "Title" "Repo" "Author" "Status" "Last Updated (JST)" "Link"
+      else
+        printf '%s\t%s\t%s\t%s\t%s\n' "Title" "Repo" "Author" "Last Updated (JST)" "Link"
+      fi
       printf '%s\n' "$tsv"
       ;;
     md)
-      echo '| Title | Repo | Author | Last Updated (JST) | Link |'
-      echo '|---|---|---|---|---|'
-      printf '%s\n' "$tsv" | awk -F'\t' '{printf("| %s | %s | %s | %s | %s |\n",$1,$2,$3,$4,$5)}'
+      if [[ "$show_status" == "true" ]]; then
+        echo '| Title | Repo | Author | Status | Last Updated (JST) | Link |'
+        echo '|---|---|---|---|---|---|'
+        printf '%s\n' "$tsv" | awk -F'\t' '{printf("| %s | %s | %s | %s | %s | %s |\n",$1,$2,$3,$4,$5,$6)}'
+      else
+        echo '| Title | Repo | Author | Last Updated (JST) | Link |'
+        echo '|---|---|---|---|---|'
+        printf '%s\n' "$tsv" | awk -F'\t' '{printf("| %s | %s | %s | %s | %s |\n",$1,$2,$3,$4,$5)}'
+      fi
       ;;
     *) echo "Unknown FORMAT=$FORMAT (use: table|tsv|md)" >&2; exit 1;;
   esac
@@ -151,18 +188,18 @@ fetch_and_display_prs() {
 
 # Main execution
 # Always show review-requested PRs
-fetch_and_display_prs "user-review-requested:${USER}" "レビュー待ちPR"
+fetch_and_display_prs "user-review-requested:${USER}" "レビュー待ちPR" "false"
 
 if [[ "$INCLUDE_REVIEWING" == "true" ]]; then
   echo ""
   echo "---"
   echo ""
-  fetch_and_display_prs "reviewed-by:${USER} -author:${USER}" "レビュー中PR"
+  fetch_and_display_prs "reviewed-by:${USER} -author:${USER}" "レビュー中PR" "false"
 fi
 
 if [[ "$INCLUDE_MY_PR" == "true" ]]; then
   echo ""
   echo "---"
   echo ""
-  fetch_and_display_prs "author:${USER}" "レビュー依頼中または依頼待ちPR"
+  fetch_and_display_prs "author:${USER}" "レビュー依頼中または依頼待ちPR" "true"
 fi
