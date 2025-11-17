@@ -8,6 +8,7 @@ FORMAT="table"             # table|tsv|md
 EXTRA_QUERY=""             # e.g. "-is:draft"
 ALL_PAGES="false"          # --all: fetch all pages via curl (needs GH_TOKEN)
 INCLUDE_REVIEWING="false"  # --include-reviewing: also fetch reviewed-by:USER PRs
+INCLUDE_MY_PR="false"      # --include-my-pr: also fetch author:USER PRs
 
 usage() {
   cat <<'USAGE'
@@ -15,18 +16,21 @@ Usage:
   review-prs.sh [options] --repo OWNER/NAME [--repo OWNER/NAME]...
 
 Options:
-  --user USER           指名レビュー先（既定: msasaki666）
+  --user USER               指名レビュー先（既定: msasaki666）
   --repo OWNER/NAME         対象repo（複数指定可, OR条件）※必須
   --extra "QUERY_PART"      追加フィルタ（例: "-is:draft"）
   --format table|tsv|md     出力形式（既定: table）
   --all                     100件超も取得（curl+GH_TOKEN必須）
-  --include-reviewing       レビュー中(reviewed-by)のPRも別セクションで表示
+  --include-reviewing       レビュー中PRも別セクションで表示
+  --include-my-pr           自分が作成したPRも別セクションで表示
   -h, --help                このヘルプ
 
 Examples:
   ./review-prs.sh --repo msasaki666/hoge --repo msasaki666/fuga
   ./review-prs.sh --repo msasaki666/some --extra "-is:draft"
   ./review-prs.sh --repo msasaki666/hoge --include-reviewing
+  ./review-prs.sh --repo msasaki666/hoge --include-my-pr
+  ./review-prs.sh --repo msasaki666/hoge --include-reviewing --include-my-pr
   FORMAT=md ./review-prs.sh --repo msasaki666/hoge --repo msasaki666/fuga
   export GH_TOKEN=ghp_xxx...; ./review-prs.sh --all --repo msasaki666/fuga
 USAGE
@@ -41,6 +45,7 @@ while [[ $# -gt 0 ]]; do
     --format) FORMAT="$2"; shift 2;;
     --all) ALL_PAGES="true"; shift 1;;
     --include-reviewing) INCLUDE_REVIEWING="true"; shift 1;;
+    --include-my-pr) INCLUDE_MY_PR="true"; shift 1;;
     -h|--help) usage; exit 0;;
     *) echo "Unknown arg: $1" >&2; usage; exit 1;;
   esac
@@ -145,14 +150,19 @@ fetch_and_display_prs() {
 }
 
 # Main execution
+# Always show review-requested PRs
+fetch_and_display_prs "user-review-requested:${USER}" "レビュー待ちPR"
+
 if [[ "$INCLUDE_REVIEWING" == "true" ]]; then
-  # Display both: review-requested and reviewing
-  fetch_and_display_prs "user-review-requested:${USER}" "レビュー待ちPR"
   echo ""
   echo "---"
   echo ""
   fetch_and_display_prs "reviewed-by:${USER} -author:${USER}" "レビュー中PR"
-else
-  # Default: only review-requested
-  fetch_and_display_prs "user-review-requested:${USER}" "レビュー待ちPR"
+fi
+
+if [[ "$INCLUDE_MY_PR" == "true" ]]; then
+  echo ""
+  echo "---"
+  echo ""
+  fetch_and_display_prs "author:${USER}" "レビュー依頼中または依頼待ちPR"
 fi
