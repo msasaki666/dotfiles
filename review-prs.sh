@@ -91,6 +91,7 @@ fetch_and_display_prs() {
   local query_condition="$1"
   local section_title="$2"
   local show_status="${3:-false}"
+  local hide_author="${4:-false}"
 
   local query="is:open is:pr ${query_condition} ${EXTRA_QUERY} ${REPO_QUERY}"
   local first_url
@@ -108,7 +109,7 @@ fetch_and_display_prs() {
   count=$(jq -r '.total_count' <<<"$json")
 
   if [[ "$count" -eq 0 ]]; then
-    echo "${section_title}（@${USER} / repos: ${REPOS[*]}）: 該当なし"
+    echo "${section_title}: 該当なし"
     return
   fi
 
@@ -121,7 +122,21 @@ fetch_and_display_prs() {
   fi
 
   local tsv
-  if [[ "$show_status" == "true" ]]; then
+  if [[ "$show_status" == "true" ]] && [[ "$hide_author" == "true" ]]; then
+    # Status shown, author hidden
+    tsv=$(jq -r '
+      .[]
+      | [
+          .title,
+          (.repository_url | sub("https://api.github.com/repos/"; "")),
+          (if .draft then "draft" else "open" end),
+          ((.updated_at | fromdateiso8601) + (9*60*60) | strftime("%Y-%m-%d %H:%M")),
+          .html_url
+        ]
+      | @tsv
+    ' <<<"$sorted")
+  elif [[ "$show_status" == "true" ]]; then
+    # Status shown, author shown
     tsv=$(jq -r '
       .[]
       | [
@@ -134,7 +149,20 @@ fetch_and_display_prs() {
         ]
       | @tsv
     ' <<<"$sorted")
+  elif [[ "$hide_author" == "true" ]]; then
+    # Status hidden, author hidden
+    tsv=$(jq -r '
+      .[]
+      | [
+          .title,
+          (.repository_url | sub("https://api.github.com/repos/"; "")),
+          ((.updated_at | fromdateiso8601) + (9*60*60) | strftime("%Y-%m-%d %H:%M")),
+          .html_url
+        ]
+      | @tsv
+    ' <<<"$sorted")
   else
+    # Status hidden, author shown
     tsv=$(jq -r '
       .[]
       | [
@@ -148,13 +176,21 @@ fetch_and_display_prs() {
     ' <<<"$sorted")
   fi
 
-  echo "${section_title}（@${USER} / repos: ${REPOS[*]}）: ${count}件"
+  echo "${section_title}: ${count}件"
   echo ""
 
   case "$FORMAT" in
     table)
-      if [[ "$show_status" == "true" ]]; then
+      if [[ "$show_status" == "true" ]] && [[ "$hide_author" == "true" ]]; then
+        { printf '%s\t%s\t%s\t%s\t%s\n' "Title" "Repo" "Status" "Last Updated (JST)" "Link"
+          printf '%s\n' "$tsv"
+        } | column -t -s $'\t'
+      elif [[ "$show_status" == "true" ]]; then
         { printf '%s\t%s\t%s\t%s\t%s\t%s\n' "Title" "Repo" "Author" "Status" "Last Updated (JST)" "Link"
+          printf '%s\n' "$tsv"
+        } | column -t -s $'\t'
+      elif [[ "$hide_author" == "true" ]]; then
+        { printf '%s\t%s\t%s\t%s\n' "Title" "Repo" "Last Updated (JST)" "Link"
           printf '%s\n' "$tsv"
         } | column -t -s $'\t'
       else
@@ -164,18 +200,30 @@ fetch_and_display_prs() {
       fi
       ;;
     tsv)
-      if [[ "$show_status" == "true" ]]; then
+      if [[ "$show_status" == "true" ]] && [[ "$hide_author" == "true" ]]; then
+        printf '%s\t%s\t%s\t%s\t%s\n' "Title" "Repo" "Status" "Last Updated (JST)" "Link"
+      elif [[ "$show_status" == "true" ]]; then
         printf '%s\t%s\t%s\t%s\t%s\t%s\n' "Title" "Repo" "Author" "Status" "Last Updated (JST)" "Link"
+      elif [[ "$hide_author" == "true" ]]; then
+        printf '%s\t%s\t%s\t%s\n' "Title" "Repo" "Last Updated (JST)" "Link"
       else
         printf '%s\t%s\t%s\t%s\t%s\n' "Title" "Repo" "Author" "Last Updated (JST)" "Link"
       fi
       printf '%s\n' "$tsv"
       ;;
     md)
-      if [[ "$show_status" == "true" ]]; then
+      if [[ "$show_status" == "true" ]] && [[ "$hide_author" == "true" ]]; then
+        echo '| Title | Repo | Status | Last Updated (JST) | Link |'
+        echo '|---|---|---|---|---|'
+        printf '%s\n' "$tsv" | awk -F'\t' '{printf("| %s | %s | %s | %s | %s |\n",$1,$2,$3,$4,$5)}'
+      elif [[ "$show_status" == "true" ]]; then
         echo '| Title | Repo | Author | Status | Last Updated (JST) | Link |'
         echo '|---|---|---|---|---|---|'
         printf '%s\n' "$tsv" | awk -F'\t' '{printf("| %s | %s | %s | %s | %s | %s |\n",$1,$2,$3,$4,$5,$6)}'
+      elif [[ "$hide_author" == "true" ]]; then
+        echo '| Title | Repo | Last Updated (JST) | Link |'
+        echo '|---|---|---|---|'
+        printf '%s\n' "$tsv" | awk -F'\t' '{printf("| %s | %s | %s | %s |\n",$1,$2,$3,$4)}'
       else
         echo '| Title | Repo | Author | Last Updated (JST) | Link |'
         echo '|---|---|---|---|---|'
@@ -187,19 +235,23 @@ fetch_and_display_prs() {
 }
 
 # Main execution
+# Show common info header
+echo "@${USER} / repos: ${REPOS[*]}"
+echo ""
+
 # Always show review-requested PRs
-fetch_and_display_prs "user-review-requested:${USER}" "レビュー待ちPR" "false"
+fetch_and_display_prs "user-review-requested:${USER}" "レビュー待ちPR" "false" "false"
 
 if [[ "$INCLUDE_REVIEWING" == "true" ]]; then
   echo ""
   echo "---"
   echo ""
-  fetch_and_display_prs "reviewed-by:${USER} -author:${USER}" "レビュー中PR" "false"
+  fetch_and_display_prs "reviewed-by:${USER} -author:${USER}" "レビュー中PR" "false" "false"
 fi
 
 if [[ "$INCLUDE_MY_PR" == "true" ]]; then
   echo ""
   echo "---"
   echo ""
-  fetch_and_display_prs "author:${USER}" "レビュー依頼中または依頼待ちPR" "true"
+  fetch_and_display_prs "author:${USER}" "レビュー依頼中または依頼待ちPR" "true" "true"
 fi
