@@ -77,7 +77,9 @@ ZSH_THEME="robbyrussell"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git)
 
-source $ZSH/oh-my-zsh.sh
+if [ -f $ZSH/oh-my-zsh.sh ]; then
+  source $ZSH/oh-my-zsh.sh
+fi
 
 # User configuration
 
@@ -331,3 +333,8 @@ export PATH="$HOME/.local/bin:$PATH"
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+plugins=(... direnv)
+# NOTE: ウェブブラウザ内でファイルパスをクリック可能にする場合（例えば型エラーが発生した時など）、シェル環境（例：.bashrc）で以下の環境変数をエクスポートしてください：
+# https://ihp.digitallyinduced.com/Guide/editors.html#using-ihp-with-visual-studio-code-vscode
+export IHP_EDITOR="code --goto"
