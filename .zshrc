@@ -338,3 +338,5 @@ plugins=(... direnv)
 # NOTE: ウェブブラウザ内でファイルパスをクリック可能にする場合（例えば型エラーが発生した時など）、シェル環境（例：.bashrc）で以下の環境変数をエクスポートしてください：
 # https://ihp.digitallyinduced.com/Guide/editors.html#using-ihp-with-visual-studio-code-vscode
 export IHP_EDITOR="code --goto"
+# Added by Antigravity
+export PATH="/Users/motoakisasaki/.antigravity/antigravity/bin:$PATH"
