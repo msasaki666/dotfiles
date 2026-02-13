@@ -170,3 +170,10 @@ export PATH="$HOME/.local/bin:$PATH"
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+# pnpm
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    export PNPM_HOME="$HOME/Library/pnpm"
+    export PATH="$PNPM_HOME:$PATH"
+fi
+# pnpm end
