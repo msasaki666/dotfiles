@@ -42,6 +42,16 @@ link_to_homedir() {
       echo "copying Taskfile.yml..."
       command cp "$dotdir/Taskfile.concrete.yml" "$HOME/Taskfile.yml"
     fi
+
+    # --- Starship ---
+    command echo "linking starship config..."
+    command mkdir -p "$HOME/.config"
+    command ln -snf "$dotdir/config/starship/starship.toml" "$HOME/.config/starship.toml"
+
+    # --- Warp theme ---
+    command echo "linking warp theme..."
+    command mkdir -p "$HOME/.warp/themes"
+    command ln -snf "$dotdir/config/warp/themes/catppuccin_mocha.yml" "$HOME/.warp/themes/catppuccin_mocha.yml"
   else
     command echo "home directory is same as install src"
   fi
@@ -62,6 +72,29 @@ update_preference() {
   fi
 }
 
+install_terminal_tools() {
+  if ! command -v brew > /dev/null; then
+    command echo "Homebrew not found. Skipping terminal tools installation."
+    return
+  fi
+
+  command echo "installing terminal tools via Homebrew..."
+
+  if ! command -v starship > /dev/null; then
+    brew install starship
+  fi
+
+  if [ ! -d "/Applications/Warp.app" ]; then
+    brew install --cask warp
+  fi
+
+  # Nerd Font
+  if ! system_profiler SPFontsDataType 2>/dev/null | grep -q "JetBrainsMono Nerd Font"; then
+    brew install --cask font-jetbrains-mono-nerd-font
+  fi
+}
+
+install_terminal_tools
 link_to_homedir
 update_preference
 command echo -e "\e[1;36m Install completed!!!! \e[m"

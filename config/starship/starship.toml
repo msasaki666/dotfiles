@@ -1,0 +1,25 @@
+palette = "catppuccin_mocha"
+
+format = """
+$directory$git_branch$git_status$character"""
+
+[directory]
+style = "bold lavender"
+truncation_length = 2
+truncation_symbol = "…/"
+
+[git_branch]
+symbol = " "
+style = "bold mauve"
+
+[git_status]
+style = "bold maroon"
+
+[character]
+success_symbol = "[❯](bold lavender)"
+error_symbol = "[❯](bold red)"
+
+[palettes.catppuccin_mocha]
+lavender = "#b4befe"
+mauve = "#cba6f7"
+maroon = "#eba0ac"

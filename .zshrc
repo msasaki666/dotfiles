@@ -340,3 +340,6 @@ plugins=(... direnv)
 export IHP_EDITOR="code --goto"
 # Added by Antigravity
 export PATH="/Users/motoakisasaki/.antigravity/antigravity/bin:$PATH"
+if which starship > /dev/null; then
+    eval "$(starship init zsh)"
+fi
