@@ -259,8 +259,6 @@ fi
 export USE_GKE_GCLOUD_AUTH_PLUGIN=True
 export PATH="$PATH:/opt/metasploit-framework/bin"
 export PATH="$PATH:/usr/local/lib/flutter/bin"
-export GEM_HOME=$HOME/.gem
-export PATH=$GEM_HOME/bin:$PATH
 if which pack > /dev/null; then
     . $(pack completion --shell zsh)
 fi
