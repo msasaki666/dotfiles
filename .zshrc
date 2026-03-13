@@ -278,8 +278,10 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 fi
 # pnpm end
 
-export VOLTA_HOME="$HOME/.volta"
-export PATH="$VOLTA_HOME/bin:$PATH"
+# mise (version manager)
+if which mise > /dev/null; then
+    eval "$(mise activate zsh)"
+fi
 
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /opt/homebrew/bin/terraform terraform

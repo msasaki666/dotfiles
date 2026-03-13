@@ -56,7 +56,7 @@ task <task-name>        # Run specific task
 Both [.zshrc](.zshrc) and [.bashrc](.bashrc) share:
 - Common aliases for git (`g`, `gst`, `gc`, etc.), docker (`d`, `dc`, `dcu`, etc.), and kubernetes (`k`)
 - Peco integration for interactive command history (Ctrl+R)
-- Tool-specific configurations (rbenv, volta, cargo, gcloud, etc.)
+- Tool-specific configurations (rbenv, mise, cargo, gcloud, etc.)
 - Editor set to `code -w` (VSCode with wait flag)
 
 Zsh-specific features:

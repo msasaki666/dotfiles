@@ -120,8 +120,10 @@ if which pack > /dev/null; then
     . "$(pack completion)"
 fi
 
-export VOLTA_HOME="$HOME/.volta"
-export PATH="$VOLTA_HOME/bin:$PATH"
+# mise (version manager)
+if which mise > /dev/null; then
+    eval "$(mise activate bash)"
+fi
 
 if [ -f ~/.config/op/plugins.sh ]; then
   # shellcheck disable=SC1090
