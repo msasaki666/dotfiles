@@ -87,7 +87,11 @@ HISTSIZE=1000
 HISTFILESIZE=1000
 
 # -w ファイルが閉じられてからreturnする
-export EDITOR="code -w"
+if command -v zed &> /dev/null; then
+  export EDITOR="zed -w"
+else
+  export EDITOR="code -w"
+fi
 
 function set_bundle_editor_for_remote_container() {
     # vscode remote containerの時はbundle openの時に、code -wだとうまく動かないので

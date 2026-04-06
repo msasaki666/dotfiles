@@ -179,7 +179,11 @@ fi
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
 # -w ファイルがå閉じられてからreturnする
-export EDITOR="code -w"
+if command -v zed &> /dev/null; then
+  export EDITOR="zed -w"
+else
+  export EDITOR="code -w"
+fi
 
 set_bundle_editor_for_remote_container() {
     # vscode remote containerの時はbundle openの時に、code -wだとうまく動かないので
