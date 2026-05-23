@@ -268,13 +268,11 @@ if which pack > /dev/null; then
 fi
 
 # pnpm
-# osがmacで、pnpmコマンドが存在する場合は、pnpmのパスを設定
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    if which pnpm > /dev/null; then
-        export PNPM_HOME="$HOME/Library/pnpm"
-        export PATH="$PNPM_HOME:$PATH"
-    fi
-fi
+export PNPM_HOME="/Users/sasakimotoaki/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME/bin:"*) ;;
+  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
+esac
 # pnpm end
 
 # mise (version manager)
