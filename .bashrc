@@ -178,3 +178,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     export PATH="$PNPM_HOME:$PATH"
 fi
 # pnpm end
+
+# Modern Web Guidance: opt out of anonymous usage telemetry
+# https://github.com/GoogleChrome/modern-web-guidance#-telemetry--privacy
+export DISABLE_TELEMETRY=1
