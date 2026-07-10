@@ -165,8 +165,8 @@ fi
 
 export PATH="$HOME/.local/bin:$PATH"
 
-# bun completions
-[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+# bun completions (_bun は zsh 専用の補完スクリプトなので bash では読まない)
+[ -n "$ZSH_VERSION" ] && [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 
 # bun
 export BUN_INSTALL="$HOME/.bun"

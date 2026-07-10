@@ -333,7 +333,10 @@ export PATH="$HOME/.local/bin:$PATH"
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
-plugins=(... direnv)
+# direnv: .envrc のあるディレクトリで環境を自動読み込みする(フックは末尾近くで登録するのが推奨)
+if command -v direnv > /dev/null; then
+  eval "$(direnv hook zsh)"
+fi
 # NOTE: ウェブブラウザ内でファイルパスをクリック可能にする場合（例えば型エラーが発生した時など）、シェル環境（例：.bashrc）で以下の環境変数をエクスポートしてください：
 # https://ihp.digitallyinduced.com/Guide/editors.html#using-ihp-with-visual-studio-code-vscode
 export IHP_EDITOR="code --goto"
